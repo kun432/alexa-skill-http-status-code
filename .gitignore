@@ -78,5 +78,6 @@ jspm_packages
 # Yarn Integrity file
 .yarn-integrity
 
-
+# ask-cli
+.ask
 
