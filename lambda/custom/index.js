@@ -3,33 +3,59 @@
 
 const Alexa = require('ask-sdk-core');
 
+const skillName = 'HTTPステータスコード検索';
+const promptText = '三桁のステータスコードを言ってください。';
+const httpStatusCodes = require('./httpStatusCodes');
+
 const LaunchRequestHandler = {
   canHandle(handlerInput) {
     return handlerInput.requestEnvelope.request.type === 'LaunchRequest';
   },
   handle(handlerInput) {
-    const speechText = 'Welcome to the Alexa Skills Kit, you can say hello!';
+    console.log("LaunchRequestHandler called");
+    const speechText = `${skillName}です。`;
 
     return handlerInput.responseBuilder
-      .speak(speechText)
-      .reprompt(speechText)
-      .withSimpleCard('Hello World', speechText)
+      .speak(speechText + promptText)
+      .reprompt(promptText)
+      .withSimpleCard(skillName, speechText)
       .getResponse();
   },
 };
 
-const HelloWorldIntentHandler = {
+const StatusCodeIntent = {
   canHandle(handlerInput) {
     return handlerInput.requestEnvelope.request.type === 'IntentRequest'
-      && handlerInput.requestEnvelope.request.intent.name === 'HelloWorldIntent';
+      && handlerInput.requestEnvelope.request.intent.name === 'StatusCodeIntent';
   },
   handle(handlerInput) {
-    const speechText = 'Hello World!';
+    console.log("StatusCodeIntentHandler called");
+    const statusCodeSlot = handlerInput.requestEnvelope.request.intent.slots.statusCode;
+    if (statusCodeSlot && statusCodeSlot.value) {
+      const codeValue = statusCodeSlot.value;
+      console.log(`codeValue=${codeValue}`);
+      console.log(`Desc=${httpStatusCodes[codeValue].Desc}`);
 
-    return handlerInput.responseBuilder
-      .speak(speechText)
-      .withSimpleCard('Hello World', speechText)
-      .getResponse();
+      if (httpStatusCodes[codeValue]) {
+        const speechText = `ステータスコード${codeValue}ですね。`
+          + `ステータスコード${codeValue}は、${httpStatusCodes[codeValue].Desc}です。${httpStatusCodes[codeValue].LongDesc}`;
+
+        return handlerInput.responseBuilder
+          .speak(speechText)
+          .withSimpleCard(skillName, speechText)
+          .getResponse();
+      } else {
+        const speechText = `ステータスコード${codeValue}は登録されていません。`;
+
+        return handlerInput.responseBuilder
+          .speak(speechText)
+          .reprompt(promptText)
+          .withSimpleCard(skillName, speechText)
+          .getResponse();
+      }
+    } else {
+      throw new Error("unknown slot value.");
+    }
   },
 };
 
@@ -39,12 +65,12 @@ const HelpIntentHandler = {
       && handlerInput.requestEnvelope.request.intent.name === 'AMAZON.HelpIntent';
   },
   handle(handlerInput) {
-    const speechText = 'You can say hello to me!';
+    const speechText = 'このスキルでは、三桁のHTTPステータスコードを言うと、ステータスコードの意味を教えてくれます。例えば、「200」と言ってください。';
 
     return handlerInput.responseBuilder
       .speak(speechText)
-      .reprompt(speechText)
-      .withSimpleCard('Hello World', speechText)
+      .reprompt(promptText)
+      .withSimpleCard(skillName, speechText)
       .getResponse();
   },
 };
@@ -56,11 +82,11 @@ const CancelAndStopIntentHandler = {
         || handlerInput.requestEnvelope.request.intent.name === 'AMAZON.StopIntent');
   },
   handle(handlerInput) {
-    const speechText = 'Goodbye!';
+    const speechText = 'ご利用ありがとうございました。';
 
     return handlerInput.responseBuilder
       .speak(speechText)
-      .withSimpleCard('Hello World', speechText)
+      .withSimpleCard(skillName, speechText)
       .getResponse();
   },
 };
@@ -82,10 +108,10 @@ const ErrorHandler = {
   },
   handle(handlerInput, error) {
     console.log(`Error handled: ${error.message}`);
-
+    const sorryText = 'すいません、ただしく聞き取れませんでした。もう一度言っていただけますか？';
     return handlerInput.responseBuilder
-      .speak('Sorry, I can\'t understand the command. Please say again.')
-      .reprompt('Sorry, I can\'t understand the command. Please say again.')
+      .speak(sorryText)
+      .reprompt(sorryText)
       .getResponse();
   },
 };
@@ -95,7 +121,7 @@ const skillBuilder = Alexa.SkillBuilders.custom();
 exports.handler = skillBuilder
   .addRequestHandlers(
     LaunchRequestHandler,
-    HelloWorldIntentHandler,
+    StatusCodeIntent,
     HelpIntentHandler,
     CancelAndStopIntentHandler,
     SessionEndedRequestHandler
