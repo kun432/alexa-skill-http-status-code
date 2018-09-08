@@ -81,3 +81,5 @@ jspm_packages
 # ask-cli
 .ask
 
+# ask
+.zip
