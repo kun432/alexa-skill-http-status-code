@@ -82,4 +82,4 @@ jspm_packages
 .ask
 
 # ask
-.zip
+*.zip
