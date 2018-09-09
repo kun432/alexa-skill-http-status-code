@@ -34,11 +34,10 @@ const StatusCodeIntent = {
     if (statusCodeSlot && statusCodeSlot.value) {
       const codeValue = statusCodeSlot.value;
       console.log(`codeValue=${codeValue}`);
-      console.log(`Desc=${httpStatusCodes[codeValue].Desc}`);
 
-      if (httpStatusCodes[codeValue]) {
+      if (codeValue in httpStatusCodes) {
         const speechText = `ステータスコード${codeValue}ですね。`
-          + `ステータスコード${codeValue}は、${httpStatusCodes[codeValue].Desc}です。${httpStatusCodes[codeValue].LongDesc}`;
+          + `ステータスコード${codeValue}は、${httpStatusCodes[codeValue].Name}、です。${httpStatusCodes[codeValue].Desc}`;
 
         return handlerInput.responseBuilder
           .speak(speechText)
@@ -48,7 +47,7 @@ const StatusCodeIntent = {
         const speechText = `ステータスコード${codeValue}は登録されていません。`;
 
         return handlerInput.responseBuilder
-          .speak(speechText)
+          .speak(speechText + promptText)
           .reprompt(promptText)
           .withSimpleCard(skillName, speechText)
           .getResponse();
