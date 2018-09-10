@@ -3,8 +3,8 @@
 
 const Alexa = require('ask-sdk-core');
 
-const skillName = 'HTTPステータスコード検索';
-const promptText = '三桁のステータスコードを言ってください。';
+const skillName = 'HTTPステータス検索';
+const promptText = '三桁のHTTPステータスコードを言ってください。';
 const httpStatusCodes = require('./httpStatusCodes');
 
 const LaunchRequestHandler = {
@@ -36,12 +36,19 @@ const StatusCodeIntent = {
       console.log(`codeValue=${codeValue}`);
 
       if (codeValue in httpStatusCodes) {
-        const speechText = `ステータスコード${codeValue}ですね。`
-          + `ステータスコード${codeValue}は、${httpStatusCodes[codeValue].Name}、です。${httpStatusCodes[codeValue].Desc}`;
+
+        let speechText = `ステータスコード${codeValue}ですね。ステータスコード${codeValue}は、${httpStatusCodes[codeValue].speechName}、です。`;
+        if (httpStatusCodes[codeValue].speechDesc !== undefined) {
+          speechText += httpStatusCodes[codeValue].speechDesc;
+        } else {
+          speechText += httpStatusCodes[codeValue].Desc;
+        }
+
+        let cardText = `ステータスコード${codeValue}ですね。ステータスコード${codeValue}は、${httpStatusCodes[codeValue].Name}、です。${httpStatusCodes[codeValue].Desc}`;
 
         return handlerInput.responseBuilder
           .speak(speechText)
-          .withSimpleCard(skillName, speechText)
+          .withSimpleCard(skillName, cardText)
           .getResponse();
       } else {
         const speechText = `ステータスコード${codeValue}は登録されていません。`;
@@ -64,7 +71,7 @@ const HelpIntentHandler = {
       && handlerInput.requestEnvelope.request.intent.name === 'AMAZON.HelpIntent';
   },
   handle(handlerInput) {
-    const speechText = 'このスキルでは、三桁のHTTPステータスコードを言うと、ステータスコードの意味を教えてくれます。例えば、「200」と言ってください。';
+    const speechText = 'このスキルでは、三桁のHTTPステータスコードを言うと、ステータスコードの意味を教えてくれます。例えば、「ステータスコード200を教えて」「404の意味を調べて」と言ってください。また、単に「302」とステータスコードを言うだけでも構いません。';
 
     return handlerInput.responseBuilder
       .speak(speechText)
