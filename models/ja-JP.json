@@ -1,0 +1,78 @@
+{
+    "interactionModel": {
+        "languageModel": {
+            "invocationName": "エイチティーティーピーステータス検索",
+            "intents": [
+                {
+                    "name": "AMAZON.CancelIntent",
+                    "samples": [
+                        "キャンセル"
+                    ]
+                },
+                {
+                    "name": "AMAZON.HelpIntent",
+                    "samples": [
+                        "やり方を教えて",
+                        "使い方を教えて",
+                        "ヘルプ"
+                    ]
+                },
+                {
+                    "name": "AMAZON.StopIntent",
+                    "samples": [
+                        "おつかれ",
+                        "さよなら",
+                        "もういい",
+                        "おしまい",
+                        "閉じて",
+                        "終わり",
+                        "終了",
+                        "ストップ"
+                    ]
+                },
+                {
+                    "name": "AMAZON.NavigateHomeIntent",
+                    "samples": []
+                },
+                {
+                    "name": "StatusCodeIntent",
+                    "slots": [
+                        {
+                            "name": "statusCode",
+                            "type": "AMAZON.NUMBER"
+                        }
+                    ],
+                    "samples": [
+                        "ステータスコード {statusCode} ってどういう意味",
+                        "ステータスコード {statusCode} ってなに",
+                        "{statusCode} ってどういう意味",
+                        "{statusCode} ってなに",
+                        "ステータスコード {statusCode} の意味を教えてくれる",
+                        "ステータスコード {statusCode} を教えてくれる",
+                        "{statusCode} の意味を教えてくれる",
+                        "{statusCode} を教えてくれる",
+                        "ステータスコード {statusCode} の意味はなに",
+                        "{statusCode} の意味はなに",
+                        "ステータスコード {statusCode} はなに",
+                        "{statusCode} はなに",
+                        "ステータスコード {statusCode} の意味は",
+                        "{statusCode} の意味は",
+                        "ステータスコード {statusCode} は",
+                        "{statusCode} は",
+                        "ステータスコード {statusCode} の意味を調べて",
+                        "{statusCode} の意味を調べて",
+                        "{statusCode} を調べて",
+                        "ステータスコード {statusCode} を調べて",
+                        "ステータスコード {statusCode} の意味を教えて",
+                        "{statusCode} の意味を教えて",
+                        "{statusCode} を教えて",
+                        "ステータスコード {statusCode} を教えて",
+                        "ステータスコード {statusCode}",
+                        "{statusCode}"
+                    ]
+                }
+            ],
+            "types": []
+        }
+    }
+}
